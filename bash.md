@@ -239,9 +239,58 @@ fi
 ```
 
 ## Functions
+a shell function can take in arguments as inputs, like a shell script as discussed in
+[## Arguments](#arguments) and return back an exit status, which is a 
+value between 0 and 255.
+If you try to return a value higher than 255 it will overflow.
+
+Like 256 will give you 0.
 
 
-### control structures
+Example:
+```bash
+#!/usr/bin/env bash
+myFunction(){
+    if (($1 >= 2)); then
+        local returnValue=0
+    else
+        local returnValue=1
+    fi 
+    return $returnValue
+}
+
+myFunction 4
+
+capturedReturnValue=$?
+
+echo "Return value: $capturedReturnValue"
+
+```
+
+
+You cannot return a string or word from a bash function.
+But you can just put an echo in a function as output.
+
+
+```bash
+#!/usr/bin/env bash
+myFunction(){
+    local str="$@"
+    local output=str
+    echo $output
+}
+```
+now you can either just call it
+```bash
+myFunction "Some string"
+```
+or you can save the output in a variable
+
+```bash
+funcOut=$(myFunction "Some string")
+```
+
+## Control structures
 
 ### Block Statments
 
@@ -355,3 +404,46 @@ case "$something" in
 esac
 
 ```
+## Loops
+
+
+
+
+### for loops
+Basic Syntax
+```bash
+for argument in [list]; do
+    commands
+done
+```
+Example:
+```bash
+for f in {1..10}; do
+    echo $f
+done
+```
+
+### while loops
+Basic Syntax
+```bash
+while [condition]; do
+    commands
+done
+
+```
+
+### until loop
+Basic Syntax
+```bash
+until [condition]; do
+    commands
+done
+```
+
+
+### break and continue
+
+#### break
+Skip entire rest of loop
+#### continue
+Skip rest of particular loop iteration
